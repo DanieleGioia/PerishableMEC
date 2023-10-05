@@ -1,0 +1,18 @@
+{
+    "OffLine":{
+        "ev_Daily":100,
+        "std_Daily":60,
+        "Distr":"NB",
+        "P":5,
+        "MD":0,
+        "LIFO%":{"Type":"LS","params":{"alpha":2,"beta": 2}}
+    },
+    "OnLine":{
+        "ev_Daily":100,
+        "std_Daily":60,
+        "Distr":"NB",
+        "P":5,
+        "MD":0,
+        "LIFO%":{"Type":"LF","params":{"dirac":0}}
+    }
+    }
