@@ -107,7 +107,7 @@ else: # No depot conf
         markdownRetail = store_setting.get(k)['MD']
         #Retailer instance
         costRetailer = producer['C']
-        retailers[k] = RetailManager(k,scenarioMgr,store_setting.get(k)['LIFO%'],invManager,supManager,timeHorizonLearn,pricesRetail,markdownRetail,costRetailer)
+        retailers[k] = RetailManager(k,scenarioMgr,store_setting.get(k)['LIFO%'],invManager,supManager,timeHorizon,pricesRetail,markdownRetail,costRetailer)
 
 
 #####
