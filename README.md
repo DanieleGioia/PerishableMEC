@@ -11,8 +11,8 @@ This library was crafted by me starting from a blank page. I did my best to prov
   title={On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels.},
   author={Gioia, Daniele Giovanni and Minner, Stefan},
   journal={Transportation Research Part E: Logistics and Transportation Review},
-  volume={tbd},
-  pages={tbd},
+  volume={180},
+  pages={103354},
   year={2023},
   publisher={Elsevier}
 }
