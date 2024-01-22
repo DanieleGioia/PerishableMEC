@@ -276,3 +276,24 @@ scenarioMgr = ScenarioGenerationCorr(store_setting['OnLine']['Distr'], store_set
 ```
 
 Currently, only Gaussian copula and a restricted set of marginal distributions are available. Further improvements on the scenario generator and its interface are welcomed.
+
+
+### ${\color{red}{\text{Additional notes on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+
+The range of values for the coefficient of variation in Gioia and Minner (2023) is modeled by considering an adjusted daily adaptation of the weekly estimated values from Broekmeulen and van Donselaar (2019). Specifically, considering an independent daily adaptation, with our settings of mean demand $\mu_\text{daily} = 100$ we would have
+```math
+ \text{cv}_{\text{daily}} = \frac{ \sigma_{\text{daily}} }{ \mu_{\text{daily}} } = \frac{\sigma_{\text{weekly}}}{\mu_\text{daily}\sqrt{7}} = \frac{\mu^{0.77}_\text{weekly}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}\mu^{0.77}_\text{daily}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}0.7}{\sqrt{7}}\mu^{-0.23}_\text{daily} = 0.41
+```
+according their equation $\sigma_{\text{weekly}}=0.7\mu_{\text{weekly}}^{0.77}$. However, we deal with products with high daily sales (and low shelf life) and they state and report that under these assumptions perishables are correlated to higher correspondent daily standard deviations. Unfortunately, for confidentiality reasons, they normalize their data and provide only aggregated statistics, making more specific deductions complex. To provide meaningful experiments, we assume higher values and investigate more than one option ($\text{cv}_{\text{daily}} = 0.6, 0.9$), focusing on the relative differences in their effects rather than absolute behaviors in a specific case study, where this very code can be used being part of the scientific contribution. 
+
+```Bibtex
+@article{broekmeulen2019quantifying,
+  title={Quantifying the potential to improve on food waste, freshness and sales for perishables in supermarkets},
+  author={Broekmeulen, Rob ACM and van Donselaar, Karel H},
+  journal={International Journal of Production Economics},
+  volume={209},
+  pages={265--273},
+  year={2019},
+  publisher={Elsevier}
+}
+```
