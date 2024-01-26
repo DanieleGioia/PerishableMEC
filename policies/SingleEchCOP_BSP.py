@@ -60,7 +60,7 @@ class SingleEchCOP_BSP(PolicySingleEchelon):
         for k in self.bsp_ret:
             for d in range(self.prod_setting['SL'] - self.prod_setting['LT'] - 1):
                 self.dispatched.get(k)[d] = 0
-            orderSize = np.max([self.paramsDispatch[k] - sum(obs[k]['inventory']) - sum(sum(obs[k]['dispatched'])),0]) #BSP
+            orderSize = np.max([self.paramsDispatch[k] - sum(obs[k]['inventory']) - np.sum(sum(obs[k]['dispatched'])),0]) #BSP
             self.dispatched.get(k)[self.prod_setting['SL'] - self.prod_setting['LT'] - 1] = np.rint(orderSize)
         ########
         return {},self.dispatched
