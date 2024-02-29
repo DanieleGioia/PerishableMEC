@@ -85,7 +85,7 @@ class StatManager:
     def setEndEps(self,eps: float):
         if eps >= 1 or eps <= 0:
             raise ValueError('Please set a valid eps between 0 and 1.')
-        self.eps = eps
+        self.eps = eps*100
     
     #Update functions for time steps and daily profits
 
