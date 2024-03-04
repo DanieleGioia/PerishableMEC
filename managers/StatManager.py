@@ -37,7 +37,7 @@ class StatManager:
         #minimum number of steps
         self.minN = 120 # 18 weeks ca.
         #Terminate the simulation
-        self.eps = 0.0025 #perc
+        self.eps = 0.0002 #Bug found, a zero was missing in its previous version
         self.window = 35 #min window as default 5 weeks
         # cashFlowHistory
         self.cashFlowHist = [] 
