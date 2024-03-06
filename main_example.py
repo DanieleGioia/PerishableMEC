@@ -35,7 +35,7 @@ flagDepot = (conf[-5:] == 'Depot')
 #######Inizialization
 
 #Related time horizon of the simulation
-Weeks = 500 #number of MAXIMUM weeks tested
+Weeks = 10000 #number of MAXIMUM weeks tested
 timeHorizon = 7*Weeks #time horizon in days
 transientDays = 3*(producer['SL'] + producer['LT']) #starts accumulating statistics after this number of periods
 
