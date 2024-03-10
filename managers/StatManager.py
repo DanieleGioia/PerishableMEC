@@ -166,7 +166,7 @@ class StatManager:
                 return True 
             up = np.nanmax(self.avgProfitHist[self.n - self.window:self.n])
             low = np.nanmin(self.avgProfitHist[self.n - self.window:self.n])
-            return ( (up-low) <= self.eps*np.mean(self.avgProfitHist))
+            return ( abs(up-low) <= self.eps*np.mean(self.avgProfitHist))
         else:
             return False
     #Main performance metrics
