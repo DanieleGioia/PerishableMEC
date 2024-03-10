@@ -31,7 +31,25 @@ class InventoryManager:
                     self.Inventory[i] += orderSize[i] #index is the residual shelf life, the higher the newer
         else:
             self.Inventory[self.ShelfLife-1] = np.rint(orderSize)
-    #Function that simulates the demand fulfillment of 1 single item per call
+    #Functions that simulates the demand fulfillment of 1 single item per call
+    def meetDemandLifo(self, howmany = 1):
+        Sales = max(0,np.min([howmany,np.sum(self.Inventory)]))
+        toSell = Sales
+        for age in range(self.ShelfLife):
+            disp = self.Inventory[self.ShelfLife - age - 1 ]
+            self.Inventory[self.ShelfLife - age - 1 ] -= max(0,np.min([toSell,disp]))
+            toSell -= max(0,np.min([toSell,disp]))
+        return Sales
+    
+    def meetDemandFifo(self, howmany = 1):
+        Sales = max(0,np.min([howmany,np.sum(self.Inventory)]))
+        toSell = Sales
+        for ageRev in range(self.ShelfLife):
+            disp = self.Inventory[ageRev]
+            self.Inventory[ageRev] -= max(0,np.min([toSell,disp]))
+            toSell -= max(0,np.min([toSell,disp]))
+        return Sales
+
     def meetDemand(self,age, howmany = 1):
         if (not self.isAvailable(howmany)) or (not self.isAvailableAge(age,howmany)):
             raise ValueError("The customer cannot buy something missing")

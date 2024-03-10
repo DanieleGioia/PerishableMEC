@@ -30,8 +30,6 @@ class DepotManager():
         #statistics and plots
         #oreder history, useful to study the shape of the policy per product
         self.history = []
-        #retail-oriented statistics
-        self.sales = np.zeros(self.invManager.ShelfLife)
         self.totProfit = 0
         self.lostDemand = 0
         self.totSold = 0
@@ -54,8 +52,6 @@ class DepotManager():
         self.invManager.clearState()
         self.supManager.clearState()
         self.history = []
-        #retail-oriented quantities reset
-        self.sales = np.zeros(self.invManager.ShelfLife)
         self.totSold = 0
         self.totProfit = 0
         self.lostDemand = 0
@@ -134,7 +130,7 @@ class DepotManager():
              #####
         #####Morning, the day begins
         #####
-        self.sales = np.zeros(self.invManager.ShelfLife) #sales of the previous day erased
+        #####
         profit = 0 #profit with no costs included
         if self.flagPrint: 
             #current inventory
@@ -148,34 +144,11 @@ class DepotManager():
         lostClients = 0 #Clients that found no items to buy
         LifoC = int(self.simulateLIFO(np.rint(self.scenario[0][self.current_step]))) #number of LIFO clients
         FifoC = int(np.rint(self.scenario[0][self.current_step]) - LifoC) #number of FIFO clients
-        stockout = False        
-        for i in range(LifoC): #First lifo then fifo, but since there are no price differences, it has no effect on the retailer proift or number of stockouts.
-            if not stockout:
-                availability = self.invManager.getProductAvailabilty()
-                if any(availability):
-                    for ag in range(self.invManager.ShelfLife):
-                        if self.invManager.isAvailableAge(ag):
-                            self.sales[self.invManager.ShelfLife - ag - 1] += self.invManager.meetDemand(ag)
-                            break
-                else:
-                    stockout = True
-                    lostClients+=1
-            else:
-                lostClients+=1
-        #FIFO
-        for i in range(FifoC):
-            if not stockout:
-                availability = self.invManager.getProductAvailabilty()
-                if any(availability):                             
-                    for ag in range(self.invManager.ShelfLife-1,-1,-1):
-                        if self.invManager.isAvailableAge(ag):
-                            self.sales[self.invManager.ShelfLife - ag - 1] += self.invManager.meetDemand(ag)
-                            break
-                else:
-                    stockout = True  
-                    lostClients+=1
-            else:
-                lostClients+=1
+        #First lifo then fifo, but since there are no price differences, it has no effect on the retailer proift or number of stockouts.
+        LifoSold = self.invManager.meetDemandLifo(LifoC)
+        FifoSold = self.invManager.meetDemandFifo(FifoC)
+        lostClients = LifoC +  FifoC - LifoSold - FifoSold #Clients that found no items to buy
+        salesSums = LifoSold + FifoSold
         #####
         #The store closes
         #Update lost demand
@@ -184,14 +157,13 @@ class DepotManager():
         #update and scrap
         scrapped = self.invManager.updateInventory() # the ageing happens after the store is closed.
         #
-        salesSums = sum(self.sales)
-        profit += sum(self.prices*np.array(self.sales)) + self.markdowns*scrapped
+        profit += self.prices*salesSums + self.markdowns*scrapped
         self.totSold += salesSums
         self.totProfit += profit
         self.totScrapped += scrapped
         if self.flagPrint:
             print('Scrapped by Depot: ',scrapped)
-            print(' Depot:\nSold:  ',self.sales,' Scrapped: ',scrapped)
+            print(' Depot:\nSold:  ',salesSums,' Scrapped: ',scrapped)
             print('No purchase: ',lostClients)
             print( 'Total sold so far', self.totSold)
             print( 'Profit of the day ', profit)

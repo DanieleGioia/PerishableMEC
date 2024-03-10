@@ -31,7 +31,6 @@ class RetailManager():
         self.totDispatched = 0
         #sales per product per day
         self.history = []
-        self.sales = np.zeros(self.invManager.ShelfLife)
         #only if there is not a depot
         self.cost = costRetailer
     #
@@ -52,7 +51,6 @@ class RetailManager():
         self.invManager.clearState()
         self.supManager.clearState()
         self.history = []
-        self.sales = np.zeros(self.invManager.ShelfLife)
         #observation
         obs = {}
         obs['inventory'] = np.zeros(self.invManager.ShelfLife).copy()
@@ -82,7 +80,6 @@ class RetailManager():
         #Shipped items from the depot at the end of the day
         self.supManager.GetOrder(orderSize)
         self.history.append(orderSize)
-        self.sales = np.zeros(self.invManager.ShelfLife) #sales of the previous day erased
         #Debug prints
         if self.flagPrint: 
             #current inventory
@@ -110,38 +107,18 @@ class RetailManager():
         #we receive the items
         delivered = self.supManager.deliverSupply()
         self.invManager.receiveSupply(delivered)
-        #aggregated lost and unmet of the current day
-        lostClients = 0 #Clients that found no items to buy
+        #we sell them
         LifoC = int(self.simulateLIFO(np.rint(self.scenario[0][self.current_step]))) #number of LIFO clients
         FifoC = int(np.rint(self.scenario[0][self.current_step]) - LifoC) #number of FIFO clients
-        stockout = False   
-        for i in range(LifoC): #First lifo then fifo, but since there are no price differences, it has no effect on the retailer proift or number of stockouts.
-            if not stockout:
-                availability = self.invManager.getProductAvailabilty()
-                if any(availability):
-                    for ag in range(self.invManager.ShelfLife):
-                        if self.invManager.isAvailableAge(ag):
-                            self.sales[self.invManager.ShelfLife - ag - 1] += self.invManager.meetDemand(ag)
-                            break
-                else:
-                    stockout = True
-                    lostClients+=1
-            else:
-                lostClients+=1
-        #Fifo
-        for i in range(FifoC):
-            if not stockout:
-                availability = self.invManager.getProductAvailabilty()
-                if any(availability):
-                    for ag in range(self.invManager.ShelfLife-1,-1,-1):
-                        if self.invManager.isAvailableAge(ag):
-                            self.sales[self.invManager.ShelfLife - ag - 1] += self.invManager.meetDemand(ag)
-                            break
-                else:
-                    stockout = True   
-                    lostClients+=1 
-            else:
-                lostClients+=1
+        if self.flagPrint: 
+            print("Lifo = ",LifoC," Fifo = ",FifoC)
+        #First lifo then fifo, but since there are no price differences, it has no effect on the retailer proift or number of stockouts.
+        LifoSold = self.invManager.meetDemandLifo(LifoC)
+        FifoSold = self.invManager.meetDemandFifo(FifoC)
+        if self.flagPrint: 
+            print("Sold Lifo = ",LifoSold," Sold Fifo = ",FifoSold)
+        lostClients = LifoC +  FifoC - LifoSold - FifoSold #Clients that found no items to buy
+        salesSums = LifoSold + FifoSold
         #####
         #The store closes
         #####
@@ -151,16 +128,14 @@ class RetailManager():
         self.lostDemand += lostClients
         self.totDispatched += np.sum(orderSize)
         self.totScrapped += scrapped
-        #
-        salesSums = sum(self.sales)
         profit = 0 #profit with no costs included, that is computed by the depot that knows the cost.
         #The Profit uses disaggregated sales instead (if discount policies applied)
-        profit += sum(self.prices*np.array(self.sales)) + self.markdowns*scrapped
+        profit += self.prices*salesSums + self.markdowns*scrapped
         self.totSold += salesSums
         self.totProfit += profit
         #Debug prints
         if self.flagPrint:
-            print(' Dispatched/Ordered(if no depot) product: ',orderSize,' Sold:  ',self.sales,' Scrapped: ',scrapped)
+            print(' Dispatched/Ordered(if no depot) product: ',orderSize,' Sold:  ',salesSums,' Scrapped: ',scrapped)
             print('No purchase: ',lostClients)
             print( 'Total dispatched by the depot/orederd by retailer so far ', self.totDispatched)
             print( 'Total scrapped so far', self.totScrapped)

@@ -182,14 +182,12 @@ policy.setParameters(*policy.xToParams(x))
 ###### 
 #Dynamics
 env = DailySimulation(retailers,depot,statMgr,timeHorizon,flagPrint)
+env.setSeed('All',1)
 #Learning? Testing?
 # env.setTest()
 env.setLearn()
-scenarioMgr.reset(timeHorizon=timeHorizon)
-env.setSeed('All',1)
 done = False
 obs = env.reset()
-
 
 
 while not done:

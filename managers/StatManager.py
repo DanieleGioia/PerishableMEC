@@ -35,7 +35,7 @@ class StatManager:
         # number of steps (active ones without initial head )
         self.n = 0
         #minimum number of steps
-        self.minN = 120 # 18 weeks ca.
+        self.minN = 180 
         #Terminate the simulation
         self.eps = 0.0002 #Bug found, a zero was missing in its previous version
         self.window = 35 #min window as default 5 weeks
