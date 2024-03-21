@@ -277,7 +277,6 @@ scenarioMgr = ScenarioGenerationCorr(store_setting['OnLine']['Distr'], store_set
 
 Currently, only Gaussian copula and a restricted set of marginal distributions are available. Further improvements on the scenario generator and its interface are welcomed.
 
-
 ## ${\color{blue}{\text{Additional notes on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
 
 The range of values for the coefficient of variation in Gioia and Minner (2023) is modeled by considering an adjusted daily adaptation of the weekly estimated values from Broekmeulen and van Donselaar (2019). Specifically, considering an independent daily adaptation, with our settings of mean demand $\mu_\text{daily} = 100$ we would have
@@ -297,3 +296,46 @@ according their equation $\sigma_{\text{weekly}}=0.7\mu_{\text{weekly}}^{0.77}$.
   publisher={Elsevier}
 }
 ```
+
+## ${\color{red}{\text{Bug on Table 5 and 6 on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+
+The code associated with the numerical simulations related to the heuristic approaches (Section 4.2) in the article "On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels" had a bug in the estimation of the expected value, not achieving the claimed accuracy over the 35-period sliding window employed on the evaluation of heuristics approaches. The stopping criterion for the difference between the minimum and maximum values of the statistic associated with the expected value was blocked by a limit on the maximum number of simulated steps (1400), which was insufficient to guarantee a width of 0.02%, as claimed. Fluctuations of the expected value statistic, and thus of the objective function itself, might affect the optimization strategy by excessive fluctuations and biased function evaluations. We repeated the experiments with a maximum number of steps ten times larger, equal to 14000, using the same stopping criterion and optimization strategy presented in Gioia and Minner (2023). For the out-of-sample evaluation, we increase the 7000-period-long horizon five-fold to 35000. Evaluation and optimization of the full design of experiments are here presented in an updated version of Tables 5 and 6 from Gioia and Minner (2023).
+Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values have changed slightly. For example, the waste reduction of the BSP policy for a 5-period shelf-life compared to the COP policy has decreased, while the profit values of many multi-echelon policies have improved, as they are more prone to non-convergence of the expected value estimate due to more complex dynamics during simulation than single-echelon policies. It is also reasonable to point out that the very choice of optimization algorithm is practically a hyperparameter of the study and that, using non-surrogate techniques, different results might be obtained.
+
+**Table 5 (Precise): Average profit and waste (Profit|Waste) per period with respect to different subsets of parameters and policies. Values normalized w.r.t. COP (profit, higher = better | waste smaller = better). COP values presented raw.**
+
+|                   | Subset | COP        | BSP       | FPL\_l     | FPC\_l     | FPL2K\_l   | SP\_l      | SC\_l      | SP2K\_l    |
+|-------------------|--------|------------|-----------|------------|------------|------------|------------|------------|------------|
+| **On/Off**        | 80/20  | 430 \| 20.8| -1.4 \| -2.3| 0.3 \| -3.1| 0.5 \| -7.6| 0.1 \| -1.7| 0.9 \| -8.7| 0.9 \| -1.6| 0.7 \| -5.6|
+|                   | 50/50  | 418 \| 24.7| -2.5 \| 3.9 | 0.4 \| -9.5| 1.0 \| -12.2| 0.4 \| -7.7| 1.4 \| -13.4| 1.6 \| -9.8| 1.6 \| -8.0|
+|                   | 20/80  | 407 \| 27.3| -3.6 \| -0.1| -3.8 \| -5.2| -1.2 \| -9.0| -3.2 \| -3.4| -1.9 \| 1.2| -0.1 \| -4.0| -0.2 \| 1.7|
+| **$\rho$**        | -0.5   | -          | -         | 0 \| -12.8 | 1.6 \| -17.3| 0.8 \| -12.1| 1.4 \| -12.4| 1.9 \| -9.6| 1.8 \| -10.1|
+|                   | 0      | 418 \| 24.3| -2.4 \| 0.5| -0.9 \| -6.0| 0.2 \| -10.3| -0.8 \| -3.4| 0.2 \| -6.9| 0.8 \| -4.7| 0.7 \| -1.6|
+|                   | 0.5    | -          | -         | -2 \| 0.3  | -1.3 \| -1.8| -2.3 \| 2.0 | -0.9 \| -0.8| -0.1 \| -1.9| -0.1 \| 0.1|
+| **LIFO/FIFO**     | 50/50  | 425 \| 21.8| -2.1 \| 9.3| -1.4 \| -1.4| -0.1 \| -6.8| -1.0 \| -2.2| -0.2 \| 0.0| 0.4 \| -1.1| 0.5 \| 0.8 |
+|                   | 90/10  | 411 \| 26.7| -2.7 \| -6.3| -0.5 \| -9.7| 0.5 \| -11.9| -0.6 \| -6.0| 0.8 \| -11.9| 1.3 \| -8.6| 1.1 \| -7.3|
+| **cv**            | 0.6    | 440 \| 18.1| -1.1 \| 0.0| 0.1 \| -11.2| 1.0 \| -15.3| 0.3 \| -9.1| 0.4 \| -7.3| 1.0 \| -5.5| 0.8 \| -2.6|
+|                   | 0.9    | 396 \| 30.4| -3.8 \| 1.2| -2.1 \| -2.9| -0.7 \| -6.3| -1.9 \| -1.4| 0.1 \| -6.1| 0.7 \| -5.0| 0.8 \| -4.3|
+| **SL**            | 3      | 402 \| 28.5| -4.9 \| 8.0 | -3.2 \| 2.2 | -1.7 \| -1.2| -3.0 \| 5.4 | -0.1 \| -4.1| 0.7 \| -2.2 | 0.7 \| -0.8 |
+|                   | 5      | 434 \| 20.0| -0.1 \| -9.6| 1.2 \| -17.7| 1.9 \| -21.6| 1.3 \| -18.1| 0.5 \| -9.9| 1.0 \| -9.6 | 0.9 \| -7.7 |
+| **$\mathsf{newsR}$** | 0.75  | 662 \| 41.8| -2.3 \| 1.4 | -1.3 \| -5.0| -0.4 \| -9.3| -1.1 \| -3.5 | 0.0 \| -5.8| 0.4 \| -4.5 | 0.6 \| -3.6 |
+|                   | 0.25  | 174 \| 6.7 | -2.8 \| -3.4 | 0.5 \| -12.3| 2.4 \| -11.8| 0.3 \| -9.5 | 1.4 \| -10.7| 2.4 \| -9.7 | 1.7 \| -3.9 |
+
+**Table 6 (Precise): Percentage of relative improvement of profit and waste (Profit|Waste) per period with respect to different subsets of parameters and policies. Values normalized w.r.t. COP (profit, higher = better | waste smaller = better). COP values presented raw.**
+
+|                   | Subset | COP        | BSP       | FPL\_l     | FPC\_l     | FPL2K\_l   | SP\_l      | SC\_l      | SP2K\_l    |
+|-------------------|--------|------------|-----------|------------|------------|------------|------------|------------|------------|
+| **On/Off**        | 80/20  | 430 \| 20.8| -1.8 \| -4.3| 0.4 \| -7.9| 0.8 \| -9.9| 0.2 \| -5.3| 1.5 \| -8.6| 1.5 \| -1.9| 1.2 \| -2.7|
+|                   | 50/50  | 418 \| 24.7| -3.0 \| 1.6 | 0.9 \| -12.5| 1.9 \| -13.6| 0.8 \| -8.9| 2.2 \| -12.1| 2.4 \| -12.0| 2.4 \| -7.0|
+|                   | 20/80  | 407 \| 27.3| -4.2 \| -1.8| -3.6 \| -10.2| -0.4 \| -13.8| -3.2 \| -9.8| -1.9 \| -4.0| 0.4 \| -6.1| -0.4 \| -0.9|
+| **$\rho$**        | -0.5   | -          | -         | 1 \| -17.0 | 2.9 \| -20.4| 1.5 \| -14.1| 2.3 \| -14.8| 2.9 \| -12.8| 2.7 \| -11.5|
+|                   | 0      | 418 \| 24.3| -3.0 \| -1.5| -0.8 \| -9.8| 0.8 \| -14.2| -0.8 \| -6.9| 0.6 \| -8.4| 1.2 \| -6.1| 1.0 \| -3.6|
+|                   | 0.5    | -          | -         | -2 \| -3.9  | -1.4 \| -2.7| -2.9 \| -3.0 | -1.1 \| -1.5| 0.0 \| -1.1| -0.5 \| 4.5 |
+| **LIFO/FIFO**     | 50/50  | 425 \| 21.8| -2.9 \| 5.6| -1.4 \| -7.6| 0.3 \| -11.9| -1.1 \| -8.0| -0.1 \| -3.3| 0.8 \| -4.5| 0.6 \| -0.7 |
+|                   | 90/10  | 411 \| 26.7| -3.1 \| -8.6| -0.1 \| -12.8| 1.3 \| -13.0| -0.4 \| -8.0| 1.3 \| -13.2| 2.0 \| -8.8| 1.5 \| -6.4 |
+| **cv**            | 0.6    | 440 \| 18.1| -1.1 \| -5.5| 0.6 \| -16.3| 1.8 \| -18.1| 0.8 \| -12.7| 0.7 \| -11.5| 1.6 \| -8.1| 1.2 \| -7.2 |
+|                   | 0.9    | 396 \| 30.4| -4.9 \| 2.5 | -2.1 \| -4.1| -0.3 \| -6.8| -2.2 \| -3.3| 0.5 \| -5.0| 1.2 \| -5.3| 1.0 \| 0.1  |
+| **SL**            | 3      | 402 \| 28.5| -6.3 \| 6.3 | -3.8 \| 0.7 | -1.8 \| -0.6| -3.7 \| 4.2 | 0.1 \| -4.6| 1.2 \| -2.2 | 0.8 \| -1.1 |
+|                   | 5      | 434 \| 20.0| 0.3 \| -9.2 | 2.2 \| -21.1| 3.3 \| -24.3| 2.2 \| -20.2| 1.1 \| -11.9| 1.6 \| -11.1 | 1.3 \| -6.0 |
+| **$\mathsf{newsR}$** | 0.75  | 662 \| 41.8| -2.5 \| 0.6 | -1.5 \| -7.0| -0.5 \| -11.4| -1.2 \| -5.7 | -0.1 \| -5.6| 0.4 \| -3.9 | 0.5 \| -2.6 |
+|                   | 0.25  | 174 \| 6.7 | -3.5 \| -3.5 | -0.1 \| -13.5| 2.0 \| -13.5| -0.2 \| -10.3 | 1.3 \| -10.9| 2.4 \| -9.5 | 1.6 \| -4.5 |
