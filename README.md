@@ -277,27 +277,7 @@ scenarioMgr = ScenarioGenerationCorr(store_setting['OnLine']['Distr'], store_set
 
 Currently, only Gaussian copula and a restricted set of marginal distributions are available. Further improvements on the scenario generator and its interface are welcomed.
 
-## ${\color{blue}{\text{Additional notes on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
-
-The range of values for the coefficient of variation in Gioia and Minner (2023) is modeled by considering an adjusted daily adaptation of the weekly estimated values from Broekmeulen and van Donselaar (2019). Specifically, considering an independent daily adaptation, with our settings of mean demand $\mu_\text{daily} = 100$ we would have
-```math
- \text{cv}_{\text{daily}} = \frac{ \sigma_{\text{daily}} }{ \mu_{\text{daily}} } = \frac{\sigma_{\text{weekly}}}{\mu_\text{daily}\sqrt{7}} = \frac{\mu^{0.77}_\text{weekly}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}\mu^{0.77}_\text{daily}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}0.7}{\sqrt{7}}\mu^{-0.23}_\text{daily} = 0.41
-```
-according their equation $\sigma_{\text{weekly}}=0.7\mu_{\text{weekly}}^{0.77}$. However, we deal with products with high daily sales (and low shelf life) and they state and report that under these assumptions perishables are correlated to higher correspondent daily standard deviations. Unfortunately, for confidentiality reasons, they normalize their data and provide only aggregated statistics, making more specific deductions complex. To provide meaningful experiments, we assume higher values and investigate more than one option ($\text{cv}_{\text{daily}} = 0.6, 0.9$), focusing on the relative differences in their effects rather than absolute behaviors in a specific case study, where this very code can be used being part of the scientific contribution. 
-
-```Bibtex
-@article{broekmeulen2019quantifying,
-  title={Quantifying the potential to improve on food waste, freshness and sales for perishables in supermarkets},
-  author={Broekmeulen, Rob ACM and van Donselaar, Karel H},
-  journal={International Journal of Production Economics},
-  volume={209},
-  pages={265--273},
-  year={2019},
-  publisher={Elsevier}
-}
-```
-
-## ${\color{red}{\text{Bug on Table 5 and 6 on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+### ${\color{red}{\text{Bug on Table 5 and 6 on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
 
 The code associated with the numerical simulations related to the heuristic approaches (Section 4.2) in the article "On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels" had a bug in the estimation of the expected value, not achieving the claimed accuracy over the 35-period sliding window employed on the evaluation of heuristics approaches. The stopping criterion for the difference between the minimum and maximum values of the statistic associated with the expected value was blocked by a limit on the maximum number of simulated steps (1400), which was insufficient to guarantee a width of 0.02%, as claimed. Fluctuations of the expected value statistic, and thus of the objective function itself, might affect the optimization strategy by excessive fluctuations and biased function evaluations. We repeated the experiments with a maximum number of steps ten times larger, equal to 14000, using the same stopping criterion and optimization strategy presented in Gioia and Minner (2023). For the out-of-sample evaluation, we increase the 7000-period-long horizon five-fold to 35000. Evaluation and optimization of the full design of experiments are here presented in an updated version of Tables 5 and 6 from Gioia and Minner (2023).
 Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values have changed slightly. For example, the waste reduction of the BSP policy for a 5-period shelf-life compared to the COP policy has decreased, while the profit values of many multi-echelon policies have improved, as they are more prone to non-convergence of the expected value estimate due to more complex dynamics during simulation than single-echelon policies. It is also reasonable to point out that the very choice of optimization algorithm is practically a hyperparameter of the study and that, using non-surrogate techniques, different results might be obtained.
@@ -339,3 +319,23 @@ Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values
 |                   | 5      | 434 \| 20.0| 0.3 \| -9.2 | 2.2 \| -21.1| 3.3 \| -24.3| 2.2 \| -20.2| 1.1 \| -11.9| 1.6 \| -11.1 | 1.3 \| -6.0 |
 | **$\mathsf{newsR}$** | 0.75  | 662 \| 41.8| -2.5 \| 0.6 | -1.5 \| -7.0| -0.5 \| -11.4| -1.2 \| -5.7 | -0.1 \| -5.6| 0.4 \| -3.9 | 0.5 \| -2.6 |
 |                   | 0.25  | 174 \| 6.7 | -3.5 \| -3.5 | -0.1 \| -13.5| 2.0 \| -13.5| -0.2 \| -10.3 | 1.3 \| -10.9| 2.4 \| -9.5 | 1.6 \| -4.5 |
+
+### ${\color{blue}{\text{Additional notes on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+
+The range of values for the coefficient of variation in Gioia and Minner (2023) is modeled by considering an adjusted daily adaptation of the weekly estimated values from Broekmeulen and van Donselaar (2019). Specifically, considering an independent daily adaptation, with our settings of mean demand $\mu_\text{daily} = 100$ we would have
+```math
+ \text{cv}_{\text{daily}} = \frac{ \sigma_{\text{daily}} }{ \mu_{\text{daily}} } = \frac{\sigma_{\text{weekly}}}{\mu_\text{daily}\sqrt{7}} = \frac{\mu^{0.77}_\text{weekly}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}\mu^{0.77}_\text{daily}0.7}{\mu_\text{daily}\sqrt{7}} = \frac{7^{0.77}0.7}{\sqrt{7}}\mu^{-0.23}_\text{daily} = 0.41
+```
+according their equation $\sigma_{\text{weekly}}=0.7\mu_{\text{weekly}}^{0.77}$. However, we deal with products with high daily sales (and low shelf life) and they state and report that under these assumptions perishables are correlated to higher correspondent daily standard deviations. Unfortunately, for confidentiality reasons, they normalize their data and provide only aggregated statistics, making more specific deductions complex. To provide meaningful experiments, we assume higher values and investigate more than one option ($\text{cv}_{\text{daily}} = 0.6, 0.9$), focusing on the relative differences in their effects rather than absolute behaviors in a specific case study, where this very code can be used being part of the scientific contribution. 
+
+```Bibtex
+@article{broekmeulen2019quantifying,
+  title={Quantifying the potential to improve on food waste, freshness and sales for perishables in supermarkets},
+  author={Broekmeulen, Rob ACM and van Donselaar, Karel H},
+  journal={International Journal of Production Economics},
+  volume={209},
+  pages={265--273},
+  year={2019},
+  publisher={Elsevier}
+}
+```
