@@ -148,7 +148,7 @@ env.setTest()
 env.setLearn()
 ```
 
-Specifically, under learning hypotheses, the simulation stops if the difference between the maximum and minimum value of the estimated expected value of profit in a 35-period sliding window is less than 0.025% of the current estimation. Such hyperparameters can be set in the **StatManager** class, modifying _self.eps_ and _self.window_.
+Specifically, under learning hypotheses, the simulation stops if the difference between the maximum and minimum value of the estimated expected value of profit in a 35-period sliding window is less than 0.002% of the current estimation. Such hyperparameters can be set in the **StatManager** class, modifying _self.eps_ and _self.window_.
 
 For each step, the simulation is recursively performed over all the components (retailers and depot, if any), and dynamics are organized as follows:
 
