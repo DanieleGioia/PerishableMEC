@@ -37,7 +37,7 @@ class StatManager:
         #minimum number of steps
         self.minN = 180 
         #Terminate the simulation
-        self.eps = 0.0002 #Bug found, a zero was missing in its previous version
+        self.eps = 0.0002 #This can be unattainable so touching the max steps. Like this for coherence with presented results.
         self.window = 35 #min window as default 5 weeks
         # cashFlowHistory
         self.cashFlowHist = [] 
