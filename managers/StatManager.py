@@ -37,7 +37,7 @@ class StatManager:
         #minimum number of steps
         self.minN = 180 
         #Terminate the simulation
-        self.eps = 0.0002 #This can be unattainable so touching the max steps. Like this for coherence with presented results.
+        self.eps = 0.005 #This can be unattainable so touching the max steps. !!It can be biased for high autocorrelation!!
         self.window = 35 #min window as default 5 weeks
         # cashFlowHistory
         self.cashFlowHist = [] 
