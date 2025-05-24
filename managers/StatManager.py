@@ -38,7 +38,7 @@ class StatManager:
         self.minN = 180 
         #Terminate the simulation
         self.eps = 0.005 #This can be unattainable so touching the max steps. !!It can be biased for high autocorrelation!!
-        self.window = 35 #min window as default 5 weeks
+        self.window = 100 #min window as default 100 steps (on Gioia and Minner 2023 is 35)
         # cashFlowHistory
         self.cashFlowHist = [] 
         self.avgProfitHist = []
