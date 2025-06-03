@@ -17,7 +17,7 @@ This library was crafted by me starting from a blank page. I did my best to prov
   publisher={Elsevier}
 }
 ```
-🔴 In such an article, precision for the stopping criterion was around 0.02 and not 0.02%. You will find more on this at the bottom of this README! Sorry for that :)!
+🔴 In such an article, the max-min mean width at the stopping criterion for the learning phase was not achieved. You will find more on this at the bottom of this README! Sorry for that :)!
 
 ## Code Structure
 
@@ -282,7 +282,7 @@ Currently, only Gaussian copula and a restricted set of marginal distributions a
 
 ### 🔴 **Important:** Error on precision for Table 5 and 6 on: 'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'
 
-The precision during learning in the numerical simulations related to the heuristic approaches (Section 4.2) in the article "On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels" is in fact around 0.02 **WITHOUT** the '%', so being around 2%. An oscillation of 0.02% over the 35-period sliding window is not achieved. The stopping criterion for the difference between the minimum and maximum values of the statistic associated with the expected value was blocked by a limit on the maximum number of simulated steps (1400), which is insufficient to deal with a width of 0.02%. To have an idea about why the 1400 steps do not provide something like a 0.02% but rather 0.02, here follows an intuitive calculation.
+The max-min width of 0.02% over the 35-period sliding window on the moving window during the learning in the numerical simulations related to the heuristic approaches (Section 4.2) in the article "On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels" is not achieved. The stopping criterion for the difference between the minimum and maximum values of the statistic associated with the expected value was blocked by a limit on the maximum number of simulated steps (1400), which is insufficient to deal with a width of 0.02%. To have an idea about why the 1400 steps do not provide something like a 0.02%, here follows an intuitive calculation.
 
 Discarding the moving window for simplicity and considering the process $X_t$ made of i.i.d variables (that is not, but just to give you an idea), we can set a horizon $n$ and an additional tail $k$, such that
 
@@ -296,11 +296,11 @@ assuming independence (false in our case, but is to give an idea), and the true 
 
 $\mathsf{var}(D) = \frac{k}{n(n+k)} \mu^2.$
 
-Now, if you use $n=1000$ and $k=35$ and use $2\sigma$ to build a rough interval of the oscillation, you will find $\approx 1$%.
+Now, if you use $n=1400$ and $k=35$ and use $0.05\sigma$ of the standard normal to build a rough interval of the oscillation, you will find $\approx 0.02$%. On the standard normal, this means that the oscillation is so small only with 4% probability. Moving the window, checking the min and max over all the k steps and considering autocorrelation makes the thing more complex, but the idea is that 0.02% was not there. Furthermore, it was also a very bad heuristic to stop the simulation. For this, I am sorry.
 
 To asses the effect on the experiments, they were repeated with a maximum number of steps ten times larger, equal to 14000, using the stopping criterion at 0.02% and the optimization strategy presented in Gioia and Minner (2023). For the out-of-sample evaluation, we increase the 7000-period-long horizon five-fold to 35000. Evaluation and optimization of the full design of experiments are here presented in an updated version of Tables 5 and 6 from Gioia and Minner (2023).
 
-A value of 0.02% can be unattainable, thus hitting the max it wall. Furthermore,  autocorrelation should be checked when assessing convergence, as high autocorrelation might jeopardize this heuristic. This strategy definitely requires some improvement. Right now, this library uses a 0.5% value and a 100 steps window.
+A value of 0.02% can be unattainable, thus hitting the max it wall. Furthermore,  autocorrelation should be checked when assessing convergence, as high autocorrelation might jeopardize this heuristic. This strategy definitely requires some improvement. Right now, this library uses a 0.5% value and a 100 steps window with 70000 max it.
 
 Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values have changed slightly. For example, the waste reduction of the BSP policy for a 5-period shelf-life compared to the COP policy has decreased, while the profit values of many multi-echelon policies have improved, as they are more prone to non-convergence of the expected value estimate due to more complex dynamics during simulation than single-echelon policies. It is also reasonable to point out that the very choice of optimization algorithm is practically a hyperparameter of the study and that, using non-surrogate techniques, different results might be obtained.
 
