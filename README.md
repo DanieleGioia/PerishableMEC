@@ -4,7 +4,7 @@ This library addresses the inventory control problem for perishable products in 
 The library offers flexibility in modeling various offline retailers managed by a single OFC. However, note that allocation policies for multiple offline retailers require rationing and they are not currently available. The generation of correlated scenarios too is currently only available for a single offline channel together with the online channel. Contributions and developments in this area are encouraged and welcomed.
 
 
-This library was crafted by me starting from a blank page. I did my best to provide a useful README and adequate comments. If you're a researcher or an academic enthusiast, feel free to dive in and use this for your research endeavors. All I ask is for some credit where it's due! The code supports the following article. If you employ any part of this code elsewhere, we recommend citing the original article.
+This library was crafted by me starting from a blank page. I did my best to provide a useful README and adequate comments, but it can be made way more efficient and faster. If you're a researcher or an academic enthusiast, feel free to dive in and use this for your research endeavors. The code supports the following article. If you employ any part of this code elsewhere, we recommend citing the original article. 
 
 ```Bibtex
 @article{gioia2023Onthe,
@@ -17,6 +17,7 @@ This library was crafted by me starting from a blank page. I did my best to prov
   publisher={Elsevier}
 }
 ```
+🔴 In such an article, precision for the stopping criterion was around 0.02 and not 0.02%. You will find more on this at the bottom of this README! Sorry for that :)!
 
 ## Code Structure
 
@@ -150,7 +151,7 @@ env.setLearn()
 
 Specifically, under learning hypotheses, the simulation stops if profits are all negative in a selected window (we assume we have no interest in business losing money) or the difference between the maximum and minimum value of the estimated expected value of profit in a 100-period sliding window is less than 0.5% of the current estimation. Such hyperparameters can be set in the **StatManager** class, modifying _self.eps_ and _self.window_ and it is a HEURISTIC.
 
-${\color{red}{\text{Note:}}}$ To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and a 0.5% level can be too much, hitting the max_it wall.
+🔴 **Note** To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and a 0.5% level can be too much, hitting the max_it wall.
 
 For each step, the simulation is recursively performed over all the components (retailers and depot, if any), and dynamics are organized as follows:
 
@@ -279,7 +280,7 @@ scenarioMgr = ScenarioGenerationCorr(store_setting['OnLine']['Distr'], store_set
 
 Currently, only Gaussian copula and a restricted set of marginal distributions are available. Further improvements on the scenario generator and its interface are welcomed.
 
-### ${\color{red}{\text{Error on precision for Table 5 and 6 on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+### 🔴 **Important:** Error on precision for Table 5 and 6 on: 'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'
 
 The precision during learning in the numerical simulations related to the heuristic approaches (Section 4.2) in the article "On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels" is in fact around 0.02 **WITHOUT** the '%', so being around 2%. An accuracy of 0.02% over the 35-period sliding window was not achieved. The stopping criterion for the difference between the minimum and maximum values of the statistic associated with the expected value was blocked by a limit on the maximum number of simulated steps (1400), which was insufficient to guarantee a width of 0.02%. To have an idea about why the 1400 steps suit a stop criterion like that, here follows an intuitive proof.
 
