@@ -343,7 +343,7 @@ Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values
 | **$\mathsf{newsR}$** | 0.75  | 662 \| 41.8| -2.5 \| 0.6 | -1.5 \| -7.0| -0.5 \| -11.4| -1.2 \| -5.7 | -0.1 \| -5.6| 0.4 \| -3.9 | 0.5 \| -2.6 |
 |                   | 0.25  | 174 \| 6.7 | -3.5 \| -3.5 | -0.1 \| -13.5| 2.0 \| -13.5| -0.2 \| -10.3 | 1.3 \| -10.9| 2.4 \| -9.5 | 1.6 \| -4.5 |
 
-### ${\color{blue}{\text{Additional notes on:}}}$ $\text{'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'}$
+### 🔵 Additional notes on: 'On the value of multi-echelon inventory management strategies for perishable items with on-/off-line channels'$
 
 The range of values for the coefficient of variation in Gioia and Minner (2023) is modeled by considering an adjusted daily adaptation of the weekly estimated values from Broekmeulen and van Donselaar (2019). Specifically, considering an independent daily adaptation, with our settings of mean demand $\mu_\text{daily} = 100$ we would have
 ```math
