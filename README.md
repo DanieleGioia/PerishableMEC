@@ -151,7 +151,7 @@ env.setLearn()
 
 Specifically, under learning hypotheses, the simulation stops if profits are all negative in a selected window (we assume we have no interest in business losing money) or the difference between the maximum and minimum value of the estimated expected value of profit in a 100-period sliding window is less than 0.5% of the current estimation. Such hyperparameters can be set in the **StatManager** class, modifying _self.eps_ and _self.window_ and it is a HEURISTIC.
 
-🔴 **Note** To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and a 0.5% level can be too much, hitting the max_it wall.
+🔴 **Note** To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and variane is high, variance reduction methods would be helpful.
 
 For each step, the simulation is recursively performed over all the components (retailers and depot, if any), and dynamics are organized as follows:
 
