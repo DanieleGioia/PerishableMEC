@@ -17,7 +17,7 @@ This library was crafted by me starting from a blank page. I did my best to prov
   publisher={Elsevier}
 }
 ```
-🔴 In such an article, the max-min mean width at the stopping criterion for the learning phase was not achieved. You will find more on this at the bottom of this README! Sorry for that!
+🔴 In such an article, the max-min mean width at the stopping criterion for the learning phase was not achieved (and was also bad). You will find more on this at the bottom of this README! Sorry for that!
 
 ## Code Structure
 
@@ -151,7 +151,7 @@ env.setLearn()
 
 Specifically, under learning hypotheses, the simulation stops if profits are all negative in a selected window (we assume we have no interest in business losing money) or the difference between the maximum and minimum value of the estimated expected value of profit in a 100-period sliding window is less than 0.5% of the current estimation. Such hyperparameters can be set in the **StatManager** class, modifying _self.eps_ and _self.window_ and it is a HEURISTIC.
 
-🔴 **Note** To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and variane is high, variance reduction methods would be helpful.
+🔴 **Note** To be honest, this is the first piece of code that would require improvment! Convergence should be assessed more analytically. The simulated process is quite nasty and finding efficient ways to not excessively prolong each evaluation of an optimizer is nontrivial. The autocorrelation plays a role and variane is high, variance reduction methods would be helpful. At least, Welch's method should be used!
 
 For each step, the simulation is recursively performed over all the components (retailers and depot, if any), and dynamics are organized as follows:
 
@@ -286,7 +286,7 @@ The max-min width of 0.02% over the 35-period sliding window on the moving windo
 
 To asses the effect on the experiments, they were repeated with a maximum number of steps ten times larger, equal to 14000, using the stopping criterion at 0.02% and the optimization strategy presented in Gioia and Minner (2023). For the out-of-sample evaluation, we increase the 7000-period-long horizon five-fold to 35000. Evaluation and optimization of the full design of experiments are here presented in an updated version of Tables 5 and 6 from Gioia and Minner (2023).
 
-A value of 0.02% can be unattainable, thus hitting the max it wall. Furthermore,  autocorrelation should be checked when assessing convergence, as high autocorrelation might jeopardize it. This strategy definitely requires some improvement. Right now, this library uses a 0.5% value and a 100 steps window with 70000 max it, but I really suggest to use better strategies to stop the simulation.
+A value of 0.02% can be unattainable, thus hitting the max it wall. Furthermore,  autocorrelation should be checked when assessing convergence, as high autocorrelation might jeopardize it. This strategy definitely requires some improvement. Right now, this library uses a 0.5% value and a 100 steps window with 70000 max it, but I really suggest to use better strategies to stop the simulation. At least, Welch's method should be used!
 
 Conclusions and remarks in Gioia and Minner (2023) remain valid, but some values have changed slightly. For example, the waste reduction of the BSP policy for a 5-period shelf-life compared to the COP policy has decreased, while the profit values of many multi-echelon policies have improved, as they are more prone to non-convergence of the expected value estimate due to more complex dynamics during simulation than single-echelon policies. It is also reasonable to point out that the very choice of optimization algorithm is practically a hyperparameter of the study and that, using non-surrogate techniques, different results might be obtained.
 
